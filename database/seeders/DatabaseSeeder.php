@@ -15,11 +15,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
+        // L'utilisateur de test du squelette : le cours n'a pas d'authentification, il ne sert pas.
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
+        ]);
+
+        $this->call([
+            CategorySeeder::class,
+            AllergenSeeder::class,
+            ProductSeeder::class,
         ]);
     }
 }
