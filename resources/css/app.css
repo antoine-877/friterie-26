@@ -6,4 +6,19 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+
+    /* La couleur de la friterie : un jaune frite, de 50 (très clair) à 950 (très foncé).
+       Le blanc est illisible sur un jaune : les boutons et la pastille écrivent en
+       text-zinc-950 sur bg-brand-400. Les liens et les textes de couleur prennent brand-700. */
+    --color-brand-50: oklch(0.985 0.022 92);
+    --color-brand-100: oklch(0.962 0.052 91);
+    --color-brand-200: oklch(0.93 0.09 90);
+    --color-brand-300: oklch(0.885 0.125 88);
+    --color-brand-400: oklch(0.84 0.145 86);
+    --color-brand-500: oklch(0.77 0.145 85);
+    --color-brand-600: oklch(0.66 0.13 80);
+    --color-brand-700: oklch(0.54 0.11 76);
+    --color-brand-800: oklch(0.46 0.09 73);
+    --color-brand-900: oklch(0.4 0.075 71);
+    --color-brand-950: oklch(0.28 0.05 68);
 }

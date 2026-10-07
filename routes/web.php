@@ -1,7 +1,14 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::redirect('/', '/carte');
+
+Route::get('/carte', [ProductController::class, 'index'])->name('products.index');
+Route::get('/produits/{id}', [ProductController::class, 'show'])->whereNumber('id')->name('products.show');
+
+Route::get('/categories/{id}', [CategoryController::class, 'show'])->whereNumber('id')->name('categories.show');
+
+Route::view('/composants', 'styleguide')->name('styleguide');
