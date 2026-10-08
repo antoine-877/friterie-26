@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ProductController extends Controller
@@ -15,7 +17,7 @@ class ProductController extends Controller
     public function index(): View
     {
         $categories = Category::with([
-            'products' => fn ($query) => $query->orderBy('name'),
+            'products' => fn($query) => $query->orderBy('name'),
             'products.allergens',
         ])->orderBy('position')->get();
 
@@ -30,5 +32,26 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
 
         return view('products.show', ['product' => $product]);
+    }
+
+    public function create(): View
+    {
+        $categories = Category::orderBy('position')->get();
+
+        return view('products.create', ['categories' => $categories]);
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:60'],
+            'category_id' => ['required', 'integer', 'exists:categories,id'],
+            'price' => ['required', 'numeric', 'min:0.5', 'max:50'],
+            'description' => ['nullable', 'string', 'max:500'],
+        ]);
+
+        $product = Product::create($request->only(['name', 'category_id', 'price', 'description']));
+
+        return redirect()->route('products.show', $product->id);
     }
 }

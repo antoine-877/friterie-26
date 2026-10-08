@@ -1,9 +1,3 @@
-{{--
-    Un champ de saisie. Le composant lit lui-même $errors : si le serveur a refusé la valeur,
-    la bordure passe en rouge et le champ annonce son message (aria-invalid, aria-describedby).
-    La vue garde @error('name') … @enderror sous le champ, avec id="name-error".
-    Classes de l'exercice 14.7 du chapitre Tailwind.
---}}
 @props(['name', 'type' => 'text'])
 
 @php
