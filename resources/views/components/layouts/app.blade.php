@@ -42,8 +42,11 @@
     </header>
 
     <main class="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
-        {{-- Le chapitre 15 affiche ici le message flash. --}}
-
+@session('status')
+    <p role="status" class="mb-8 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm font-medium text-green-800 dark:border-green-900 dark:bg-green-950 dark:text-green-200">
+        {{ $value }}
+    </p>
+@endsession
         {{ $slot }}
     </main>
 

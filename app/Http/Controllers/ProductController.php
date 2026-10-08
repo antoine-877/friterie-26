@@ -27,10 +27,8 @@ class ProductController extends Controller
     /**
      * La fiche d'un produit, ou une page 404 si l'id n'existe pas.
      */
-    public function show(int $id): View
+    public function show(Product $product): View
     {
-        $product = Product::findOrFail($id);
-
         return view('products.show', ['product' => $product]);
     }
 
@@ -50,8 +48,10 @@ class ProductController extends Controller
             'description' => ['nullable', 'string', 'max:500'],
         ]);
 
-        $product = Product::create($request->only(['name', 'category_id', 'price', 'description']));
+        $product = Product::create($validated);
 
-        return redirect()->route('products.show', $product->id);
+        return redirect()
+            ->route('products.show', $product->id)
+            ->with('status', 'Le produit a été ajouté.');
     }
 }
