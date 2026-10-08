@@ -2,18 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ProductController extends Controller
 {
-    /**
-     * La carte : les catégories dans l'ordre de position, chacune avec ses produits triés par nom.
-     * with() charge les produits et leurs allergènes en trois requêtes, quel que soit leur nombre.
-     */
     public function index(): View
     {
         $categories = Category::with([
@@ -24,9 +20,6 @@ class ProductController extends Controller
         return view('products.index', ['categories' => $categories]);
     }
 
-    /**
-     * La fiche d'un produit, ou une page 404 si l'id n'existe pas.
-     */
     public function show(Product $product): View
     {
         return view('products.show', ['product' => $product]);
@@ -39,19 +32,31 @@ class ProductController extends Controller
         return view('products.create', ['categories' => $categories]);
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(ProductRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'name' => ['required', 'string', 'max:60'],
-            'category_id' => ['required', 'integer', 'exists:categories,id'],
-            'price' => ['required', 'numeric', 'min:0.5', 'max:50'],
-            'description' => ['nullable', 'string', 'max:500'],
-        ]);
-
-        $product = Product::create($validated);
+        $product = Product::create($request->validated());
 
         return redirect()
             ->route('products.show', $product->id)
             ->with('status', 'Le produit a été ajouté.');
+    }
+
+    public function edit(Product $product): View
+    {
+        $categories = Category::orderBy('position')->get();
+
+        return view('products.edit', [
+            'product' => $product,
+            'categories' => $categories,
+        ]);
+    }
+
+    public function update(ProductRequest $request, Product $product): RedirectResponse
+    {
+        $product->update($request->validated());
+
+        return redirect()
+            ->route('products.show', $product->id)
+            ->with('status', 'Le produit a été modifié.');
     }
 }

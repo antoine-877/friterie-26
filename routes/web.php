@@ -14,6 +14,12 @@ Route::post('/produits', [ProductController::class, 'store'])->name('products.st
 Route::get('/produits/{product}', [ProductController::class, 'show'])
     ->name('products.show');
 
+Route::get('/produits/{product}/modifier', [ProductController::class, 'edit'])
+    ->name('products.edit');
+
+Route::put('/produits/{product}', [ProductController::class, 'update'])
+    ->name('products.update');
+
 Route::get('/categories/{id}', [CategoryController::class, 'show'])
     ->whereNumber('id')
     ->name('categories.show');

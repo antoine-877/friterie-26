@@ -1,11 +1,14 @@
 <x-layouts.app :title="$product->name">
     <p class="mb-6">
-        <a href="{{ route('products.index') }}" class="rounded-sm text-sm font-medium text-brand-700 hover:underline hover:underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 dark:text-brand-300">← Retour à la carte</a>
+        <a href="{{ route('products.index') }}"
+            class="rounded-sm text-sm font-medium text-brand-700 hover:underline hover:underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 dark:text-brand-300">←
+            Retour à la carte</a>
     </p>
 
     <article class="max-w-2xl">
         <p class="flex flex-wrap items-center gap-2">
-            <a href="{{ route('categories.show', $product->category->id) }}" class="rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600">
+            <a href="{{ route('categories.show', $product->category->id) }}"
+                class="rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600">
                 <x-badge variant="category">{{ $product->category->name }}</x-badge>
             </a>
             @if ($product->isSoldOut())
@@ -25,7 +28,8 @@
             <div>
                 <dt class="text-sm text-zinc-500 dark:text-zinc-400">Catégorie</dt>
                 <dd class="mt-1 font-semibold">
-                    <a href="{{ route('categories.show', $product->category->id) }}" class="hover:underline hover:underline-offset-4">{{ $product->category->name }}</a>
+                    <a href="{{ route('categories.show', $product->category->id) }}"
+                        class="hover:underline hover:underline-offset-4">{{ $product->category->name }}</a>
                 </dd>
             </div>
             @if ($product->isSoldOut())
@@ -47,6 +51,12 @@
                     @endforeach
                 </ul>
             @endif
+        </div>
+
+        <div class="mt-8 flex flex-wrap gap-3 border-t border-zinc-200 pt-6 dark:border-zinc-800">
+            <x-button variant="secondary" :href="route('products.edit', $product->id)">
+                Modifier
+            </x-button>
         </div>
     </article>
 </x-layouts.app>
