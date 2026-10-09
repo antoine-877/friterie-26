@@ -20,8 +20,15 @@ Route::get('/produits/{product}/modifier', [ProductController::class, 'edit'])
 Route::put('/produits/{product}', [ProductController::class, 'update'])
     ->name('products.update');
 
-Route::get('/categories/{id}', [CategoryController::class, 'show'])
-    ->whereNumber('id')
-    ->name('categories.show');
+Route::patch('/produits/{product}/rupture', [ProductController::class, 'soldOut'])
+    ->name('products.sold-out');
+
+Route::delete('/produits/{product}', [ProductController::class, 'destroy'])
+    ->name('products.destroy');
+
+Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
+
+Route::post('/categories/{category}/produits', [CategoryController::class, 'storeProduct'])->name('categories.products.store');
 
 Route::view('/composants', 'styleguide')->name('styleguide');
+

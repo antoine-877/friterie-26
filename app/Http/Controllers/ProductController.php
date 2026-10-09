@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
+use App\Models\Allergen;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
@@ -29,12 +30,20 @@ class ProductController extends Controller
     {
         $categories = Category::orderBy('position')->get();
 
-        return view('products.create', ['categories' => $categories]);
+        return view('products.create', [
+            'product' => new Product,
+            'categories' => $categories,
+            'allergens' => Allergen::all(),
+        ]);
     }
 
     public function store(ProductRequest $request): RedirectResponse
     {
-        $product = Product::create($request->validated());
+        $validated = $request->validated();
+
+        $product = Product::create($validated);
+
+        $product->allergens()->sync($validated['allergens'] ?? []);
 
         return redirect()
             ->route('products.show', $product->id)
@@ -48,15 +57,40 @@ class ProductController extends Controller
         return view('products.edit', [
             'product' => $product,
             'categories' => $categories,
+            'allergens' => Allergen::all(),
         ]);
     }
 
     public function update(ProductRequest $request, Product $product): RedirectResponse
     {
-        $product->update($request->validated());
+        $validated = $request->validated();
+
+        $product->update($validated);
+
+        $product->allergens()->sync($validated['allergens'] ?? []);
 
         return redirect()
             ->route('products.show', $product->id)
             ->with('status', 'Le produit a été modifié.');
+    }
+
+    public function soldOut(Product $product): RedirectResponse
+    {
+        if (! $product->isSoldOut()) {
+            $product->update(['sold_out_at' => now()]);
+        }
+
+        return redirect()
+            ->route('products.show', $product->id)
+            ->with('status', 'Le produit est marqué en rupture.');
+    }
+
+    public function destroy(Product $product): RedirectResponse
+    {
+        $product->delete();
+
+        return redirect()
+            ->route('products.index')
+            ->with('status', 'Le produit a été retiré de la carte.');
     }
 }
